@@ -3,6 +3,7 @@ import { request } from 'http'
 import { emptyStatement } from '@babel/types'
 
 jest.setTimeout(10000)
+const BASE_URL = "http://localhost:3000";
 
 describe('Preprod internationale test', () => {
   var domain = 'https://pass.louisvuitton.com'
@@ -53,8 +54,8 @@ describe('Preprod internationale test', () => {
 
 
   describe('Detail-catalog', () => {
-    var firstUrl = domain + '/api/v5.3/website-cache-catalog?locale=' + currentLocale
-    var currentUrl = domain + '/api/v5.3/detail-catalog?&locale=' + currentLocale
+    var firstUrl = BASE_URL + '/api/v5.3/website-cache-catalog?locale=' + currentLocale
+    var currentUrl = BASE_URL + '/api/v5.3/detail-catalog?locale=' + currentLocale
     it('should return 200 on get', async () => {
       const get: Response = await supertest('').get(firstUrl).set(headers)
 
@@ -62,8 +63,7 @@ describe('Preprod internationale test', () => {
       var userId = get.body.femme.contents[0].contents[0].id
 
       var detailUrl = currentUrl + '&id=' + userId
-      var customHeader = {'x-wsse':'true','User-Agent':'LVapp/android/5.4.6 LVApp PRD'}
-      const res: Response = await supertest('').get(detailUrl).set('x-wsse','true').set('User-Agent','LVapp/android/5.4.6 LVApp PRD')
+      const res: Response = await supertest('').get(detailUrl).set(headers)
 
       expect(res.status).toBe(200)
     })
@@ -72,7 +72,14 @@ describe('Preprod internationale test', () => {
       expect(res.status).toBe(405)
     }) */
   })
-
+  describe("example with debug server", () => {
+    it("should send request to the debug server", async () => {
+      const res: Response = await supertest("")
+        .get(`${BASE_URL}/api/v5.3/detail-catalog?locale=${currentLocale}`)
+        .set(headers);
+      expect(res.status).toBe(200);
+    });
+  });
 /* 
   describe('Auto Complete', () => {
     var currentUrl = domain + '/api/v6/geocodings/autocomplete?input="rue"&country=ES&locale=' + currentLocale
