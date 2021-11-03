@@ -1,4 +1,6 @@
 #Setup environment 
+xcode-select --install
+brew install node
 
 1. Install npm
 https://www.npmjs.com/get-npm
